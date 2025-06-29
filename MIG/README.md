@@ -125,13 +125,14 @@ The DDR3 address is divided into the following fields:
 
 ### MIG DDR3 Signal List and Descriptions
 
+```m
 Signal            Description
 
-ddr3_dq            [15:0]	Bidirectional data bus. Used to transfer read and write data. For x16 DDR3 chips → ddr3_dq[15:0] → 16 data lines.
+ddr3_dq            [15:0]	Bidirectional data bus. Used to transfer read and write data. For x16 DDR3 chips → ddr3_dq [15:0] → 16 data lines.
 
 ddr3_dqs_p / dqs_n [1:0]	Differential Data Strobe signals. Used by the memory to synchronize data transfers on the dq bus.
 
-ddr3_dm            [1:0]	Data Mask. Used during writes to mask individual bytes. One dm per byte. Since ddr3_dq[15:0] is 2 bytes, there are 2 dm lines. 
+ddr3_dm            [1:0]	Data Mask. Used during writes to mask individual bytes. One dm per byte. Since ddr3_dq [15:0] is 2 bytes, there are 2 dm lines. 
                             A masked byte is ignored during writes.
 
 ddr3_addr          [13:0]	Address bus. Used to specify row or column addresses depending on the command.
@@ -176,4 +177,4 @@ mmcm_locked                 MMCM/PLL lock status (output). Indicates whether the
 
 init_calib_complete         Memory ready (output). Goes high when memory initialization and calibration are successfully completed. At this point, the DDR3 memory 
                             is ready for use.
-
+```
