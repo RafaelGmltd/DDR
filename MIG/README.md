@@ -146,7 +146,7 @@ The DDR3 address is divided into the following fields:
 ### MIG DDR3 Signal List and Descriptions
 
 ```m
-Signal            Description
+Signal                      Description
 
 ddr3_dq            [15:0]	Bidirectional data bus. Used to transfer read and write data. For x16 DDR3 chips → ddr3_dq [15:0] → 16 data lines.
 
