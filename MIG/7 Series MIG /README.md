@@ -92,10 +92,155 @@ Why is UART needed in a DDR project on FPGA?
 
 This Memory Interface Generator is a simple menu driven tool to generate advanced memory interfaces. This tool generates HDL and pin placement constraints that will help you design your application. Kintex-7 supports DDR3 SDRAM, DDR2 SDRAM, LPDDR2 SDRAM, QDR II+ SRAM, RLDRAMII and RLDRAMIII. Virtex-7 supports DDR3 SDRAM, DDR2 SDRAM, LPDDR2 SDRAM, QDR II+ SRAM, RLDRAMII and RLDRAMIII. Artix-7 supports DDR3 SDRAM, DDR2 SDRAM and LPDDR2 SDRAM. Zynq supports DDR3 SDRAM, DDR2 SDRAM and LPDDR2 SDRAM
 
-Briefly about the internal settings:
+To correctly configure the MIG 7 IP core, we will refer to the Arty S7 Reference Manual:
 
+3 DDR3L Memory
 
+[Arty S7](https://digilent.com/reference/programmable-logic/arty-s7/reference-manual)
+
+Table 3.1. DDR3L settings for the Arty S7 lists all the main parameters that we will use.
 
 Here is what our completed block design looks like:
 
 ![Block Design](block_design.png)
+
+After the Block Design is generated, proceed to:
+File → Export → Export Hardware
+
+Then open SDK via:
+File → Launch SDK
+
+## What's SDK?
+
+In simple terms:
+
+    Imagine you have built a hardware platform (for example, on an FPGA with a MicroBlaze or Zynq processor).
+
+    Now you need to write programs that will run on that processor.
+
+    The SDK (Software Development Kit) is a special software (or set of tools) that helps you write, compile, debug, and load these programs onto the processor.
+
+What’s included in the SDK?
+
+    Code editor — where you write your programs.
+
+    Compiler — which converts your code into machine language for the FPGA processor.
+
+    Debugger — to find and fix errors in your code.
+
+    Tools to load programs onto the hardware platform.
+
+    Often it includes example code and libraries to simplify development.
+
+### In SDK, "File → New → Application Project" means:
+
+You are creating a new software project — a container for your application code that will run on the FPGA’s embedded processor (like MicroBlaze or Zynq).
+
+#### What is OS Platform?
+It refers to the operating system or runtime environment that your application will run on, on the embedded processor inside the FPGA.
+
+Common options:
+
+    Standalone (no OS)
+
+        The application runs without an operating system (bare-metal).
+
+        Typically used for simple programs that directly control the hardware.
+
+        Ideal for small embedded systems or applications requiring real-time response.
+
+    FreeRTOS
+
+        A lightweight, open-source real-time operating system for microcontrollers and embedded systems.
+
+        Supports tasks, priorities, timers, synchronization, etc.
+
+        Good choice if you need multitasking without the overhead of a full OS.
+
+    Linux (PetaLinux)
+
+        A full-featured Linux OS customized for FPGA platforms.
+
+        Suitable for complex applications requiring a file system, networking, or advanced services.
+
+        Requires more hardware resources and configuration effort.
+
+#### What does Target Hardware mean in SDK?
+
+Target Hardware refers to the hardware platform your software project will run on.
+Simply put:
+
+It describes what hardware your program will execute on, including:
+
+    The type and configuration of the processor (e.g., MicroBlaze or Zynq),
+
+    Bus connections (e.g., AXI interconnects and peripherals),
+
+    Clock frequencies,
+
+    Memory,
+
+    Connected IP cores (UART, Timers, GPIOs, etc.).
+
+What are Hardware Platforms in SDK or Vitis?
+
+The Hardware Platforms section lists all the available hardware platform files (usually .xsa, formerly .hdf) in your workspace. These files are generated from Vivado and contain:
+
+    The full hardware description,
+
+    The bitstream (if exported with it),
+
+    Configuration for the processor and peripherals,
+
+    And are used to generate the Board Support Package (BSP) — drivers and libraries for your code.
+
+#### What is a Board Support Package (BSP)?
+
+The BSP is a set of low-level software components that provide hardware-specific support for your application to run on the target FPGA platform.
+It includes:
+
+    Drivers for IP cores
+    (e.g., UART, AXI Timer, SPI, GPIO)
+
+    Configuration headers
+
+        xparameters.h: contains base addresses of peripherals
+
+        Other headers like xgpio.h, xtmrctr.h, etc.
+
+    Runtime environment
+
+        Either Standalone or FreeRTOS, depending on your OS platform
+
+    Startup code, linker scripts, and Makefiles
+    To help build and run your application properly.
+
+Why is BSP important?
+
+    It abstracts the hardware — you can use drivers instead of manually handling memory-mapped registers.
+
+    It is automatically generated from the .xsa file you exported from Vivado.
+
+    Your application code depends on the BSP to build and interact with hardware.
+
+#### What are Templates in SDK / Vitis?
+
+Templates are ready-to-use sample applications you can select when creating a new Application Project.
+
+What do they do?
+
+Templates provide:
+
+    Pre-written example code (like main.c)
+
+    A working project structure
+
+    Automatic inclusion of necessary drivers from the BSP
+
+    Sample usage of hardware-related APIs
+
+### We select "Memory Test".
+
+ And we get a folder with ready-to-use C examples, including tests, headers, and all the necessary libraries.
+
+ I will slightly modify the source code from the memory test template.
